@@ -1,33 +1,36 @@
-name: Build Hekate
+name: Compile Hekate
 
 on:
   push:
     branches:
-      - main
+      - main  # 可以根据你的默认分支名称调整
+  pull_request:
+    branches:
+      - main  # 可以根据你的默认分支名称调整
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install dependencies
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install build dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get -y install build-essential
-        sudo apt-get -y install git
-        sudo apt-get -y install python3
-        sudo apt-get -y install python3-pip
-        sudo pip3 install -U pyopenssl
-        sudo pip3 install -U cryptography
-        sudo pip3 install -U construct
-        sudo pip3 install -U pycryptodomex
+        sudo apt update
+        sudo apt install -y git build-essential cmake
 
     - name: Build Hekate
       run: |
+        cd hekate
+        mkdir build
+        cd build
+        cmake ..
         make
 
-    - name: Upload Artifact
+    - name: Upload Hekate binary
       uses: actions/upload-artifact@v2
       with:
-        name: hekate-binary
-        path: .
+        name: hekate-bin
+        path: hekate/build/hekate_ctcaer.bin
