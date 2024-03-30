@@ -1,31 +1,28 @@
-name: Build
+name: Build Hekate
 
 on:
   push:
     branches:
-      - main  # 触发主分支上的推送
+      - main  # 当主分支有推送时触发
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # 选择运行环境，这里选择 Ubuntu
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository  # 检出仓库
+    - name: Checkout repository
       uses: actions/checkout@v2
       
-    - name: Set up Node.js  # 配置 Node.js 环境
+    - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
 
-    - name: Install dependencies  # 安装依赖
-      run: npm install
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libusb-1.0-0-dev
+        npm install
 
-    - name: Build project  # 构建项目
+    - name: Build Hekate
       run: npm run build
-
-    - name: Archive artifacts  # 归档构建产物
-      uses: actions/upload-artifact@v2
-      with:
-        name: build-artifact
-        path: path/to/build/directory  # 将实际路径替换为你的构建产物路径
