@@ -24,7 +24,7 @@ jobs:
 
     - name: Build Hekate
       run: |
-        make -j$(nproc)
+        make
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
